@@ -1,0 +1,18 @@
+<div class="container mt-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1>Restaurants</h1>
+    <% if policy(Restaurant).new? %>
+      <%= link_to new_restaurant_path, class: 'text-dark text-decoration-none' do %>
+        <i class="fa-solid fa-plus"></i>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="cards">
+    <%= render @restaurants, show_owner: false %>
+    <%# @restaurants.each do |restaurant| %>
+      <%#= render restaurant, show_owner: false %>
+      <%# `render restaurant` is the same as this line below: %>
+      <%#= render 'restaurants/restaurant', restaurant: restaurant, show_owner: false %>
+      <%# end %>
+    </div>
+  </div>

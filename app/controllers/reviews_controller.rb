@@ -13,13 +13,32 @@ class ReviewsController < ApplicationController
     @review.restaurant = @restaurant # adding the belongs_to here
     authorize @review
 
-    if @review.save
-      # redirect_to restaurant's page
-      redirect_to restaurant_path(@restaurant)
-    else
-      # display the form again
-      render "restaurants/show", status: :unprocessable_entity
-    end
+    
+      if @review.save
+        # redirect_to restaurant's page
+        respond_to do |format|
+          format.html { redirect_to restaurant_path(@restaurant) }
+          format.json do
+            # send the json with the new review and the empty form
+            render json: {
+              review_html: render_to_string(partial: "reviews/review", formats: :html, locals: { review: @review }),
+              form_html: render_to_string(partial: "reviews/new", formats: :html, locals: { restaurant: @review.restaurant, review: Review.new })
+          }.to_json
+          end
+        end
+      else
+        # display the form again
+        respond_to do |format|
+          format.html { render "restaurants/show", status: :unprocessable_entity }
+          format.json do
+            render json: {
+              form_html: render_to_string(partial: "reviews/new", formats: :html, locals: { restaurant: @review.restaurant, review: @review })
+          }.to_json
+          end
+        end
+        
+      end
+ 
   end
 
   def destroy

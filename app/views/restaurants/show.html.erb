@@ -25,23 +25,15 @@
       <div class="d-flex align-items-center">
         <h3>Reviews</h3>
       </div>
-      <div>
+      <div data-controller="insert-in-list">
         <div>
-          <%= simple_form_for [@restaurant, @review] do |f| %>
-            <%= f.input :content, label: false %>
-            <%= f.submit class: 'btn btn-primary mt-2' %>
-          <% end %>
+          <%= render "reviews/new", restaurant: @restaurant, review: Review.new %>
         </div>
-        <div>
+        <div data-insert-in-list-target="list">
           <% if @restaurant.reviews.any? %>
            
-            <%= @restaurant.reviews.order(created_at: :desc).each do |review| %>
-              <p class="m-5">
-                <i class="fa-solid fa-quote-left fa-2x"></i>
-                <%= review.content %>
-              </p>
-           <% end %>
-
+            <%= render @restaurant.reviews.order(created_at: :desc) %>
+  
           <% else %>
             <p>No reviews yet.</p>
           <% end %>
